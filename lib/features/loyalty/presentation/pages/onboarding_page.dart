@@ -42,7 +42,6 @@ class _OnboardingPageState extends State<OnboardingPage> {
                 onPageChanged: (i) => setState(() => _index = i),
                 children: const [
                   _SplashSlide(
-                    title: 'Rewarity',
                     subtitle: 'Loyalty made lovable',
                     // Tip: put your logo here
                     asset: 'assets/illustrations/logo.png',
@@ -52,7 +51,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                     subtitle: 'Delight users with tiers, points, and perks',
                     asset: 'assets/illustrations/gradient_card.png',
                   ),
-                  _FeaturesGridSlide(), // the 4-image single page + CTA
+                  FeaturesGridSlide(),
                 ],
               ),
             ),
@@ -77,10 +76,9 @@ class _OnboardingPageState extends State<OnboardingPage> {
 }
 
 class _SplashSlide extends StatelessWidget {
-  final String title;
   final String subtitle;
   final String asset;
-  const _SplashSlide({required this.title, required this.subtitle, required this.asset});
+  const _SplashSlide({ required this.subtitle, required this.asset});
 
   @override
   Widget build(BuildContext context) {
@@ -99,8 +97,6 @@ class _SplashSlide extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 24),
-          Text(title, style: TextStyle(fontSize: 32, fontWeight: FontWeight.w800, color: cs.primary)),
-          const SizedBox(height: 8),
           Text(
             subtitle,
             style: TextStyle(fontSize: 16, color: cs.onSurfaceVariant),
@@ -163,10 +159,8 @@ class _BrandSlide extends StatelessWidget {
   }
 }
 
-/// The requested single page that shows 4 images and a CTA button.
-/// Replace the asset placeholders with your illustrations.
-class _FeaturesGridSlide extends StatelessWidget {
-  const _FeaturesGridSlide();
+class FeaturesGridSlide extends StatelessWidget {
+  const FeaturesGridSlide({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -178,37 +172,35 @@ class _FeaturesGridSlide extends StatelessWidget {
       _FeatureItem('Referrals', 'assets/illustrations/referral.png', 'Invite & get rewarded'),
     ];
 
-    // 2x2 grid, responsive
-    return LayoutBuilder(
-      builder: (context, c) {
-        final isWide = c.maxWidth >= 700;
-        final crossAxisCount = isWide ? 4 : 2;
-        return Padding(
-          padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-          child: Column(
-            children: [
-              const SizedBox(height: 8),
-              Text('Rewarity Features', style: Theme.of(context).textTheme.titleLarge),
-              const SizedBox(height: 16),
-              Expanded(
-                child: GridView.builder(
-                  padding: const EdgeInsets.only(bottom: 16),
-                  physics: const BouncingScrollPhysics(),
-                  itemCount: items.length,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: crossAxisCount,
-                    mainAxisSpacing: 16,
-                    crossAxisSpacing: 16,
-                    childAspectRatio: isWide ? 0.85 : 0.9,
-                  ),
-                  itemBuilder: (_, i) => _FeatureCard(item: items[i], color: cs.primaryContainer),
-                ),
-              ),
-              // CTA rendered by the outer page as the main button; keeping a secondary here is optional.
-            ],
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20, 8, 20, 0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Rewarity Features',
+            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+              fontWeight: FontWeight.w700,
+              letterSpacing: .2,
+            ),
           ),
-        );
-      },
+          const SizedBox(height: 16),
+          Expanded(
+            child: GridView.builder(
+              padding: const EdgeInsets.only(bottom: 8),
+              physics: const BouncingScrollPhysics(),
+              itemCount: items.length,
+              gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                maxCrossAxisExtent: 260,
+                mainAxisSpacing: 16,
+                crossAxisSpacing: 16,
+                childAspectRatio: .70,
+              ),
+              itemBuilder: (_, i) => _FeatureCard(item: items[i], cs: cs),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -222,31 +214,105 @@ class _FeatureItem {
 
 class _FeatureCard extends StatelessWidget {
   final _FeatureItem item;
-  final Color color;
-  const _FeatureCard({required this.item, required this.color});
+  final ColorScheme cs;
+  const _FeatureCard({required this.item, required this.cs});
+
+  static const _radius = 20.0;
 
   @override
   Widget build(BuildContext context) {
-    final cs = Theme.of(context).colorScheme;
-    return Card(
-      elevation: 0,
-      color: color,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-      child: Padding(
-        padding: const EdgeInsets.all(14),
-        child: Column(
-          children: [
-            Expanded(child: Image.asset(item.asset, fit: BoxFit.contain)),
-            const SizedBox(height: 8),
-            Text(item.title, style: const TextStyle(fontWeight: FontWeight.w700)),
-            const SizedBox(height: 6),
-            Text(item.desc, style: TextStyle(color: cs.onSurfaceVariant), textAlign: TextAlign.center),
-          ],
+    final bg = Color.alphaBlend(cs.primary.withOpacity(0.06), cs.surfaceVariant);
+
+    return Material(
+      color: Colors.transparent,
+      borderRadius: BorderRadius.circular(_radius),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(_radius),
+        onTap: () {},
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 160),
+          decoration: BoxDecoration(
+            color: bg,
+            borderRadius: BorderRadius.circular(_radius),
+            border: Border.all(color: cs.outlineVariant.withOpacity(.35)),
+            boxShadow: [
+              BoxShadow(
+                color: cs.shadow.withOpacity(0.08),
+                blurRadius: 14,
+                offset: const Offset(0, 6),
+              ),
+            ],
+          ),
+          padding: const EdgeInsets.fromLTRB(14, 12, 14, 14),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Align(
+                alignment: Alignment.topCenter,
+                child: Container(
+                  height: 4,
+                  width: 40,
+                  decoration: BoxDecoration(
+                    color: cs.primary.withOpacity(.45),
+                    borderRadius: BorderRadius.circular(99),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 10),
+              AspectRatio(
+                aspectRatio: 16 / 11,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: ColoredBox(
+                    color: cs.surface,
+                    child: Image.asset(
+                      item.asset,
+                      fit: BoxFit.fill,
+                      alignment: Alignment.center,
+                      filterQuality: FilterQuality.high,
+                    ),
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 12),
+
+              // Title
+              Text(
+                item.title,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: .2,
+                  color: cs.onSurface,
+                ),
+              ),
+
+              const SizedBox(height: 6),
+
+              // Description (clamped to avoid pushing pagination off-screen)
+              Expanded(
+                child: Text(
+                  item.desc,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: cs.onSurface.withOpacity(.78),
+                    height: 1.25,
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 }
+
 
 class _Dots extends StatelessWidget {
   final int count;

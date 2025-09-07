@@ -8,15 +8,26 @@ class RewarityApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ProviderScope(
-      child: MaterialApp.router(
-        title: 'Rewarity',
-        theme: lightTheme,
-        darkTheme: darkTheme,
-        routerConfig: router,
-        locale: const Locale('en'),
-        supportedLocales: const [Locale('en'), Locale('hi')],
-      ),
+    return const ProviderScope(
+      child: _RewarityAppRoot(),
+    );
+  }
+}
+
+class _RewarityAppRoot extends ConsumerWidget {
+  const _RewarityAppRoot({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return MaterialApp.router(
+      debugShowCheckedModeBanner: false,
+      title: 'Rewarity',
+      theme: buildLightTheme(),
+      darkTheme: buildDarkTheme(),
+      themeMode: ThemeMode.light,
+      routerConfig: router,
+      locale: const Locale('en'),
+      supportedLocales: const [Locale('en'), Locale('hi')],
     );
   }
 }
