@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "149667161271",
+    "project_id": "rewarity",
+    "storage_bucket": "rewarity.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:149667161271:android:f4091547924faeb6851932",
+        "android_client_info": {
+          "package_name": "com.rewarity.loyallty.rewarity"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyADrUoh13nOyGIn5LV3oAGxBzYLu9Ek-bo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

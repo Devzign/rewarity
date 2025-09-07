@@ -15,7 +15,7 @@ class RewarityApp extends StatelessWidget {
 }
 
 class _RewarityAppRoot extends ConsumerWidget {
-  const _RewarityAppRoot({super.key});
+  const _RewarityAppRoot();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

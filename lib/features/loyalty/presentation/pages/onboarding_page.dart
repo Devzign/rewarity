@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -14,9 +15,18 @@ class _OnboardingPageState extends State<OnboardingPage> {
 
   void _next() {
     if (_index < 2) {
-      _controller.nextPage(duration: const Duration(milliseconds: 300), curve: Curves.easeOut);
+      _controller.nextPage(
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeOut,
+      );
     } else {
-      context.go('/dashboard');
+      final user = FirebaseAuth.instance.currentUser;
+
+      if (user == null) {
+        context.goNamed('login'); // uses the widget's context
+      } else {
+        context.goNamed('dashboard');
+      }
     }
   }
 
@@ -43,7 +53,6 @@ class _OnboardingPageState extends State<OnboardingPage> {
                 children: const [
                   _SplashSlide(
                     subtitle: 'Loyalty made lovable',
-                    // Tip: put your logo here
                     asset: 'assets/illustrations/logo.png',
                   ),
                   _BrandSlide(

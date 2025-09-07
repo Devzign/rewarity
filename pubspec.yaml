@@ -20,6 +20,10 @@ dependencies:
   firebase_analytics: ^10.10.6
   firebase_core: ^2.32.0
   firebase_auth: ^4.16.0
+  flutter_staggered_grid_view:
+  animate_do:
+  google_fonts:
+  flutter_svg:
 
 dev_dependencies:
   flutter_test:
@@ -34,9 +38,6 @@ flutter:
 
   uses-material-design: true
   assets:
-    - assets/illustrations/logo.png
-    - assets/illustrations/gradient_card.png
-    - assets/illustrations/earn.png
-    - assets/illustrations/redeem.png
-    - assets/illustrations/tiers.png
-    - assets/illustrations/referral.png
+    - assets/images/
+    - assets/icons/
+    - assets/illustrations/
